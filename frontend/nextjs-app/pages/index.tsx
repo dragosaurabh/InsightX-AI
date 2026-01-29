@@ -1,7 +1,7 @@
 /**
- * InsightX AI - Home Page
+ * InsightX AI - Home Page (Desktop-First Wide Layout)
  *
- * Main page with the chat interface.
+ * Premium desktop experience with full-width design.
  */
 
 import Head from 'next/head';
@@ -11,35 +11,22 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>InsightX AI - Conversational Analytics for Payments</title>
+                <title>InsightX AI · Payment Analytics</title>
                 <meta
                     name="description"
-                    content="Ask plain English questions about your payment data. Get precise, explainable answers backed by deterministic analysis."
+                    content="Conversational analytics for payment data. Ask questions, get precise answers."
                 />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
-                {/* Open Graph */}
-                <meta property="og:title" content="InsightX AI - Conversational Analytics for Payments" />
-                <meta property="og:description" content="Ask plain English questions about your payment data. Get precise, explainable answers." />
+                <meta property="og:title" content="InsightX AI · Payment Analytics" />
+                <meta property="og:description" content="Ask questions about payment data. Get precise, explainable answers." />
                 <meta property="og:type" content="website" />
-
-                {/* Twitter */}
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="InsightX AI" />
-                <meta name="twitter:description" content="Conversational analytics for digital payments" />
             </Head>
 
-            <main className="h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800">
-                {/* Background Pattern */}
-                <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl" />
-                    <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl" />
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20" />
-                </div>
-
-                {/* Content */}
-                <div className="relative h-full max-w-5xl mx-auto">
+            <main className="h-screen overflow-hidden">
+                {/* Full-width desktop layout with comfortable padding */}
+                <div className="h-full w-full max-w-6xl mx-auto px-6 lg:px-12">
                     <ChatWindow />
                 </div>
             </main>

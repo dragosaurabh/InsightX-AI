@@ -2,21 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* ============================================
+   InsightX AI - Premium Glass Design System
+   Desktop-first, visible glass surfaces
+   ============================================ */
 
 :root {
-  --color-primary: #0ea5e9;
-  --color-primary-dark: #0284c7;
-  --color-accent: #8b5cf6;
-  --color-bg: #0f172a;
-  --color-surface: #1e293b;
-  --color-surface-light: #334155;
-  --color-text: #f8fafc;
-  --color-text-muted: #94a3b8;
-  --color-border: #334155;
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
+  /* Deep gradient background */
+  --bg-deep: #070b14;
+  --bg-mid: #0c1220;
+  --bg-surface: #111827;
+
+  /* Glass surfaces - VISIBLE, not invisible */
+  --glass-solid: rgba(17, 24, 39, 0.85);
+  --glass-elevated: rgba(22, 32, 50, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-strong: rgba(255, 255, 255, 0.15);
+  --glass-glow: rgba(59, 130, 246, 0.08);
+
+  /* Text */
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --text-muted: rgba(255, 255, 255, 0.4);
+
+  /* Accent */
+  --accent: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.2);
+  --accent-soft: rgba(59, 130, 246, 0.1);
 }
 
 * {
@@ -27,165 +41,331 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, sans-serif;
-  background: var(--color-bg);
-  color: var(--color-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
   min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar styling */
+/* Rich gradient background with soft glow */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% -20%, rgba(59, 130, 246, 0.12), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 90% 80%, rgba(99, 102, 241, 0.08), transparent 40%),
+    radial-gradient(ellipse 60% 40% at 10% 90%, rgba(139, 92, 246, 0.06), transparent 40%),
+    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 40%, var(--bg-surface) 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
-  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-surface);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-surface-light);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary);
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* Custom utility classes */
+/* ============================================
+   VISIBLE Glass Panels - Premium Surfaces
+   ============================================ */
+
 @layer components {
+
+  /* Primary Glass Panel - Strong visual presence */
+  .glass-panel {
+    background: var(--glass-elevated);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border-strong);
+    border-radius: 16px;
+    box-shadow:
+      0 4px 24px -4px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+      0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  }
+
+  /* Elevated Glass Panel - For AI responses (strongest) */
+  .glass-panel-elevated {
+    background: var(--glass-elevated);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border-strong);
+    border-radius: 20px;
+    box-shadow:
+      0 8px 32px -8px rgba(0, 0, 0, 0.5),
+      0 0 60px -20px var(--glass-glow),
+      0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+      0 2px 0 rgba(255, 255, 255, 0.1) inset;
+  }
+
+  /* Glass Card - For metrics and smaller elements */
   .glass-card {
-    @apply bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    box-shadow:
+      0 2px 8px -2px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+    transition: all 0.2s ease;
   }
 
-  .glow-primary {
-    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow:
+      0 4px 16px -4px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   }
 
-  .glow-accent {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  /* Input Surface - Grounded, visible */
+  .glass-input-container {
+    background: var(--glass-solid);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border-strong);
+    border-radius: 16px;
+    box-shadow:
+      0 -4px 24px -4px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   }
 
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent;
-  }
-
+  /* Buttons */
   .btn-primary {
-    @apply px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium rounded-lg
-           hover:from-primary-600 hover:to-primary-700 transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-slate-900;
+    @apply px-5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200;
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 12px -2px var(--accent-glow);
   }
 
-  .btn-secondary {
-    @apply px-4 py-2 bg-slate-700 text-slate-200 font-medium rounded-lg
-           hover:bg-slate-600 transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-slate-900;
+  .btn-primary:hover {
+    background: #2563eb;
+    box-shadow: 0 6px 20px -2px var(--accent-glow);
+    transform: translateY(-1px);
   }
 
-  .input-field {
-    @apply w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white
-           placeholder:text-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500
-           transition-all duration-200;
+  .btn-ghost {
+    @apply px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
   }
 
+  .btn-ghost:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  /* Input field */
+  .input-glass {
+    @apply w-full px-4 py-3.5 text-sm rounded-xl transition-all duration-200;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+  }
+
+  .input-glass::placeholder {
+    color: var(--text-muted);
+  }
+
+  .input-glass:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft), 0 0 20px -5px var(--accent-glow);
+  }
+
+  /* Chips */
   .chip {
-    @apply inline-flex items-center px-3 py-1.5 bg-slate-700/50 text-slate-300 text-sm rounded-full
-           hover:bg-slate-600/50 cursor-pointer transition-all duration-200;
+    @apply inline-flex items-center px-4 py-2 text-sm rounded-xl cursor-pointer transition-all duration-200;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
   }
 
-  .chip-active {
-    @apply bg-primary-500/20 text-primary-400 border border-primary-500/30;
+  .chip:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Metric cards */
+  .metric-item {
+    @apply glass-card px-4 py-3;
+  }
+
+  .metric-label {
+    @apply text-xs uppercase tracking-wider mb-1;
+    color: var(--text-muted);
+  }
+
+  .metric-value {
+    @apply text-xl font-semibold tabular-nums;
+    color: var(--text-primary);
+  }
+
+  .metric-secondary {
+    @apply text-xs mt-0.5;
+    color: var(--text-secondary);
+  }
+
+  /* Code block */
+  .code-block {
+    @apply font-mono text-xs rounded-xl px-4 py-3 overflow-x-auto;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+  }
+
+  /* Metadata */
+  .metadata {
+    @apply text-xs uppercase tracking-wide;
+    color: var(--text-muted);
+  }
+
+  /* Collapse trigger */
+  .collapse-trigger {
+    @apply flex items-center gap-2 text-sm cursor-pointer transition-colors duration-200;
+    color: var(--text-muted);
+  }
+
+  .collapse-trigger:hover {
+    color: var(--text-secondary);
   }
 }
 
-/* Message animations */
+/* ============================================
+   Layout
+   ============================================ */
+
+.metrics-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+@media (min-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.summary-line {
+  @apply text-base font-medium leading-relaxed;
+  color: var(--text-primary);
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
 .message-enter {
-  animation: messageSlideIn 0.3s ease-out forwards;
+  animation: fadeSlideIn 0.3s ease-out;
 }
 
-@keyframes messageSlideIn {
+@keyframes fadeSlideIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Typing indicator */
 .typing-dot {
-  animation: typingPulse 1.4s infinite both;
+  @apply w-2 h-2 rounded-full;
+  background: var(--accent);
+  animation: pulse 1.4s ease-in-out infinite;
 }
 
 .typing-dot:nth-child(2) {
-  animation-delay: 0.2s;
+  animation-delay: 0.15s;
 }
 
 .typing-dot:nth-child(3) {
-  animation-delay: 0.4s;
+  animation-delay: 0.3s;
 }
 
-@keyframes typingPulse {
-  0%, 60%, 100% {
-    transform: translateY(0);
-    opacity: 0.4;
+@keyframes pulse {
+
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
   }
+
   30% {
-    transform: translateY(-4px);
     opacity: 1;
   }
 }
 
-/* Chart styling */
-.sparkline-path {
-  fill: none;
-  stroke: var(--color-primary);
-  stroke-width: 2;
-  stroke-linecap: round;
+.expand-enter {
+  animation: expand 0.25s ease-out;
 }
 
-.sparkline-area {
-  fill: url(#sparkline-gradient);
-  opacity: 0.3;
+@keyframes expand {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Code block styling */
-.code-block {
-  @apply font-mono text-sm bg-slate-900 rounded-lg p-4 overflow-x-auto border border-slate-700;
+/* ============================================
+   Chart Container
+   ============================================ */
+
+.chart-container {
+  @apply glass-card px-4 py-3;
 }
 
-.code-block code {
-  color: #e2e8f0;
+.chart-title {
+  @apply text-xs uppercase tracking-wider mb-2;
+  color: var(--text-muted);
 }
 
-/* Number highlight */
-.number-highlight {
-  @apply font-semibold text-primary-400;
+/* ============================================
+   Focus States
+   ============================================ */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
-/* Stat card */
-.stat-card {
-  @apply glass-card p-4 flex flex-col gap-1;
-}
-
-.stat-label {
-  @apply text-xs text-slate-400 uppercase tracking-wider;
-}
-
-.stat-value {
-  @apply text-xl font-bold text-white;
-}
-
-.stat-change {
-  @apply text-sm font-medium;
-}
-
-.stat-change.positive {
-  @apply text-green-400;
-}
-
-.stat-change.negative {
-  @apply text-red-400;
+button:focus:not(:focus-visible) {
+  outline: none;
 }

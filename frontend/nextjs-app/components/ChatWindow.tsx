@@ -1,20 +1,20 @@
 /**
- * InsightX AI - Chat Window Component
+ * InsightX AI - Chat Window (Premium Glass Surfaces)
  *
- * Main chat interface with message list, input, and send functionality.
+ * Desktop-first with visible glass panels.
  */
 
 import React, { useState, useRef, useEffect } from 'react';
 import Message, { MessageData } from './Message';
-import { sendChatMessage, isClarificationResponse, getSessionId, resetSession } from '@/lib/api';
+import { sendChatMessage, isClarificationResponse, resetSession } from '@/lib/api';
 import { v4 as uuidv4 } from 'uuid';
 
 const SAMPLE_QUERIES = [
     "What is the overall failure rate in the last 30 days?",
-    "Compare failure rate on Android vs iOS",
-    "Show average transaction amount by category",
-    "What are the top failure codes?",
-    "Provide an executive summary for transactions",
+    "Compare failure rates between Android and iOS",
+    "Show me the top failure codes by volume",
+    "Average transaction amount by payment category",
+    "Provide an executive summary of transactions",
 ];
 
 export default function ChatWindow() {
@@ -25,12 +25,10 @@ export default function ChatWindow() {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
-    // Auto-scroll to bottom
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    // Auto-resize textarea
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.style.height = 'auto';
@@ -45,7 +43,6 @@ export default function ChatWindow() {
         setInput('');
         setError(null);
 
-        // Add user message
         const userMessage: MessageData = {
             id: uuidv4(),
             role: 'user',
@@ -54,7 +51,6 @@ export default function ChatWindow() {
         };
         setMessages((prev) => [...prev, userMessage]);
 
-        // Add loading message
         const loadingMessage: MessageData = {
             id: uuidv4(),
             role: 'assistant',
@@ -68,7 +64,6 @@ export default function ChatWindow() {
         try {
             const response = await sendChatMessage(text);
 
-            // Replace loading message with response
             setMessages((prev) =>
                 prev.map((msg) =>
                     msg.id === loadingMessage.id
@@ -84,18 +79,13 @@ export default function ChatWindow() {
                 )
             );
         } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+            const errorMessage = err instanceof Error ? err.message : 'Request failed';
             setError(errorMessage);
 
-            // Replace loading with error message
             setMessages((prev) =>
                 prev.map((msg) =>
                     msg.id === loadingMessage.id
-                        ? {
-                            ...msg,
-                            isLoading: false,
-                            content: `Sorry, I encountered an error: ${errorMessage}. Please try again.`,
-                        }
+                        ? { ...msg, isLoading: false, content: `Error: ${errorMessage}` }
                         : msg
                 )
             );
@@ -111,10 +101,6 @@ export default function ChatWindow() {
         }
     };
 
-    const handleFollowUpClick = (question: string) => {
-        handleSend(question);
-    };
-
     const handleNewChat = () => {
         resetSession();
         setMessages([]);
@@ -124,56 +110,78 @@ export default function ChatWindow() {
     return (
         <div className="flex flex-col h-full">
             {/* Header */}
-            <header className="flex-shrink-0 px-4 py-3 border-b border-slate-700 bg-slate-900/50 backdrop-blur-sm">
+            <header className="flex-shrink-0 py-5">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center glow-primary">
-                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    <div className="flex items-center gap-4">
+                        {/* Logo with glow */}
+                        <div
+                            className="w-10 h-10 rounded-xl flex items-center justify-center"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.15))',
+                                boxShadow: '0 0 20px -5px rgba(59, 130, 246, 0.3)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)'
+                            }}
+                        >
+                            <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
                             </svg>
                         </div>
                         <div>
-                            <h1 className="text-lg font-semibold text-white">InsightX AI</h1>
-                            <p className="text-xs text-slate-400">Conversational Analytics for Payments</p>
+                            <h1 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                                InsightX AI
+                            </h1>
+                            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                                Conversational Analytics for Payments
+                            </p>
                         </div>
                     </div>
-                    <button
-                        onClick={handleNewChat}
-                        className="btn-secondary text-sm flex items-center gap-2"
-                    >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                        </svg>
+                    <button onClick={handleNewChat} className="btn-ghost">
                         New Chat
                     </button>
                 </div>
             </header>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {/* Welcome Message */}
+            <div className="flex-1 overflow-y-auto py-4 space-y-6">
+                {/* Welcome State - Inside a visible glass panel */}
                 {messages.length === 0 && (
-                    <div className="flex flex-col items-center justify-center h-full text-center px-4">
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center mb-6 glow-primary">
-                            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                        </div>
-                        <h2 className="text-2xl font-bold text-white mb-2">Welcome to InsightX AI</h2>
-                        <p className="text-slate-400 mb-6 max-w-md">
-                            Ask questions about your payment data in plain English. Get precise, explainable answers backed by deterministic analysis.
-                        </p>
+                    <div className="flex items-center justify-center h-full">
+                        <div
+                            className="glass-panel p-8 max-w-2xl w-full text-center"
+                        >
+                            {/* Icon with glow */}
+                            <div
+                                className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                                style={{
+                                    background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1))',
+                                    boxShadow: '0 0 40px -10px rgba(59, 130, 246, 0.4)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)'
+                                }}
+                            >
+                                <svg className="w-8 h-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                </svg>
+                            </div>
 
-                        {/* Sample Queries */}
-                        <div className="w-full max-w-lg">
-                            <p className="text-sm text-slate-500 mb-3">Try asking:</p>
-                            <div className="flex flex-wrap gap-2 justify-center">
+                            <h2 className="text-2xl font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>
+                                Payment Analytics Assistant
+                            </h2>
+                            <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: 'var(--text-secondary)' }}>
+                                Ask questions about your transaction data in natural language.
+                                Get precise, explainable answers backed by real-time analysis.
+                            </p>
+
+                            {/* Sample queries in a grid */}
+                            <div className="grid gap-3">
                                 {SAMPLE_QUERIES.map((query, index) => (
                                     <button
                                         key={index}
                                         onClick={() => handleSend(query)}
-                                        className="chip text-xs"
+                                        className="chip text-left justify-start w-full"
                                     >
+                                        <svg className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: 'var(--accent)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                        </svg>
                                         {query}
                                     </button>
                                 ))}
@@ -187,7 +195,7 @@ export default function ChatWindow() {
                     <Message
                         key={message.id}
                         message={message}
-                        onFollowUpClick={handleFollowUpClick}
+                        onFollowUpClick={(q) => handleSend(q)}
                     />
                 ))}
                 <div ref={messagesEndRef} />
@@ -195,49 +203,65 @@ export default function ChatWindow() {
 
             {/* Error Banner */}
             {error && (
-                <div className="flex-shrink-0 px-4">
-                    <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-2 rounded-lg text-sm flex items-center gap-2">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {error}
-                        <button onClick={() => setError(null)} className="ml-auto hover:text-red-300">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <div className="flex-shrink-0 mb-4">
+                    <div
+                        className="glass-card px-4 py-3 flex items-center gap-3"
+                        style={{ borderColor: 'rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.1)' }}
+                    >
+                        <span style={{ color: '#ef4444' }}>{error}</span>
+                        <button
+                            onClick={() => setError(null)}
+                            className="ml-auto opacity-60 hover:opacity-100 transition-opacity"
+                            style={{ color: '#ef4444' }}
+                        >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
                 </div>
             )}
 
-            {/* Input Area */}
-            <div className="flex-shrink-0 p-4 border-t border-slate-700 bg-slate-900/50 backdrop-blur-sm">
-                <div className="flex gap-3 items-end">
-                    <div className="flex-1 relative">
-                        <textarea
-                            ref={inputRef}
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Ask about your payment data..."
-                            className="input-field resize-none min-h-[48px] max-h-[120px] pr-12"
-                            rows={1}
-                            disabled={isLoading}
-                        />
-                        <button
-                            onClick={() => handleSend()}
-                            disabled={!input.trim() || isLoading}
-                            className="absolute right-2 bottom-2 p-2 rounded-lg bg-primary-500 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-600 transition-colors"
-                        >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                            </svg>
-                        </button>
+            {/* Input Area - Visible glass container */}
+            <div className="flex-shrink-0 pb-5">
+                <div className="glass-input-container p-4">
+                    <div className="flex gap-3 items-end">
+                        <div className="flex-1 relative">
+                            <textarea
+                                ref={inputRef}
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                placeholder="Ask about your payment data..."
+                                className="input-glass resize-none min-h-[52px] max-h-[120px] pr-14"
+                                rows={1}
+                                disabled={isLoading}
+                            />
+                            <button
+                                onClick={() => handleSend()}
+                                disabled={!input.trim() || isLoading}
+                                className="absolute right-2 bottom-2 p-3 rounded-xl transition-all duration-200 disabled:opacity-30"
+                                style={{
+                                    background: input.trim() ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
+                                    color: 'white',
+                                    boxShadow: input.trim() ? '0 4px 12px -2px rgba(59, 130, 246, 0.3)' : 'none'
+                                }}
+                            >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-between mt-3 px-1">
+                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                            Press Enter to send · Shift+Enter for new line
+                        </p>
+                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                            Powered by Gemini
+                        </p>
                     </div>
                 </div>
-                <p className="text-xs text-slate-500 mt-2 text-center">
-                    Press Enter to send, Shift+Enter for new line
-                </p>
             </div>
         </div>
     );

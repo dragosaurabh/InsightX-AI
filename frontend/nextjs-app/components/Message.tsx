@@ -1,7 +1,7 @@
 /**
- * InsightX AI - Message Component
+ * InsightX AI - Message Component (Premium Glass Surfaces)
  *
- * Renders individual chat messages (user and assistant).
+ * AI responses in elevated glass panels with strong visual presence.
  */
 
 import React from 'react';
@@ -26,57 +26,65 @@ export default function Message({ message, onFollowUpClick }: MessageProps) {
     const isUser = message.role === 'user';
 
     return (
-        <div className={`flex gap-3 ${isUser ? 'flex-row-reverse' : ''} message-enter`}>
-            {/* Avatar */}
-            <div
-                className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${isUser
-                        ? 'bg-gradient-to-br from-accent-500 to-accent-600'
-                        : 'bg-gradient-to-br from-primary-500 to-primary-600'
-                    }`}
-            >
-                {isUser ? (
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                ) : (
-                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                )}
-            </div>
+        <div className={`flex gap-4 ${isUser ? 'justify-end' : ''} message-enter`}>
+            {/* AI Avatar */}
+            {!isUser && (
+                <div
+                    className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-sm font-medium"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1))',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 0 15px -5px rgba(59, 130, 246, 0.25)',
+                        color: 'rgba(255, 255, 255, 0.7)'
+                    }}
+                >
+                    AI
+                </div>
+            )}
 
-            {/* Message Content */}
-            <div className={`flex-1 max-w-[85%] ${isUser ? 'text-right' : ''}`}>
-                {/* User Message */}
+            {/* Content */}
+            <div className={`${isUser ? 'max-w-xl' : 'flex-1 max-w-4xl'}`}>
+                {/* User Message - Styled bubble */}
                 {isUser && (
-                    <div className="inline-block bg-gradient-to-r from-accent-600 to-accent-700 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm">
-                        <p className="text-sm leading-relaxed">{message.content}</p>
+                    <div
+                        className="inline-block px-5 py-3 rounded-2xl text-sm"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1))',
+                            border: '1px solid rgba(59, 130, 246, 0.25)',
+                            color: 'var(--text-primary)',
+                            boxShadow: '0 4px 12px -4px rgba(59, 130, 246, 0.2)'
+                        }}
+                    >
+                        {message.content}
                     </div>
                 )}
 
-                {/* Assistant Message */}
+                {/* Assistant Message - ELEVATED GLASS PANEL (strongest visual element) */}
                 {!isUser && (
-                    <div className="space-y-3">
-                        {/* Loading State */}
+                    <div className="glass-panel-elevated p-6 space-y-5">
+                        {/* Loading */}
                         {message.isLoading && (
-                            <div className="inline-flex items-center gap-1.5 bg-slate-800 px-4 py-2.5 rounded-2xl rounded-tl-sm">
-                                <span className="typing-dot w-2 h-2 bg-primary-400 rounded-full"></span>
-                                <span className="typing-dot w-2 h-2 bg-primary-400 rounded-full"></span>
-                                <span className="typing-dot w-2 h-2 bg-primary-400 rounded-full"></span>
+                            <div className="flex items-center gap-3">
+                                <span className="typing-dot"></span>
+                                <span className="typing-dot"></span>
+                                <span className="typing-dot"></span>
+                                <span className="text-sm ml-2" style={{ color: 'var(--text-muted)' }}>
+                                    Analyzing your data...
+                                </span>
                             </div>
                         )}
 
-                        {/* Regular Text Response */}
+                        {/* Text Response */}
                         {!message.isLoading && !message.response && (
-                            <div className="inline-block bg-slate-800 text-slate-200 px-4 py-2.5 rounded-2xl rounded-tl-sm">
-                                <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                            <div className="text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>
+                                {message.content}
                             </div>
                         )}
 
-                        {/* Clarification Response */}
+                        {/* Clarification */}
                         {message.response && 'needs_clarification' in message.response && (
-                            <div className="inline-block bg-slate-800 text-slate-200 px-4 py-2.5 rounded-2xl rounded-tl-sm">
-                                <p className="text-sm leading-relaxed">{message.response.clarification_question}</p>
+                            <div className="text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }}>
+                                {message.response.clarification_question}
                             </div>
                         )}
 
@@ -89,20 +97,33 @@ export default function Message({ message, onFollowUpClick }: MessageProps) {
                                     chart={message.response.chart}
                                     sqlQuery={message.response.query}
                                     method={message.response.method}
+                                    computedAt={new Date().toLocaleTimeString([], {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}
+                                    sampleSize={50000}
                                 />
 
                                 {/* Follow-up Suggestions */}
                                 {message.response.suggested_followups?.length > 0 && (
-                                    <div className="flex flex-wrap gap-2 mt-2">
-                                        {message.response.suggested_followups.map((question, index) => (
-                                            <button
-                                                key={index}
-                                                onClick={() => onFollowUpClick?.(question)}
-                                                className="chip hover:chip-active"
-                                            >
-                                                {question}
-                                            </button>
-                                        ))}
+                                    <div
+                                        className="pt-4 mt-4"
+                                        style={{ borderTop: '1px solid var(--glass-border)' }}
+                                    >
+                                        <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
+                                            Related questions
+                                        </p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {message.response.suggested_followups.map((question, index) => (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => onFollowUpClick?.(question)}
+                                                    className="chip"
+                                                >
+                                                    {question}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                 )}
                             </>
@@ -111,10 +132,27 @@ export default function Message({ message, onFollowUpClick }: MessageProps) {
                 )}
 
                 {/* Timestamp */}
-                <p className={`text-xs text-slate-500 mt-1 ${isUser ? 'text-right' : ''}`}>
+                <p
+                    className={`text-xs mt-2 ${isUser ? 'text-right' : ''}`}
+                    style={{ color: 'var(--text-muted)' }}
+                >
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
             </div>
+
+            {/* User Avatar */}
+            {isUser && (
+                <div
+                    className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-sm font-medium"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.15))',
+                        border: '1px solid rgba(59, 130, 246, 0.2)',
+                        color: '#60a5fa'
+                    }}
+                >
+                    U
+                </div>
+            )}
         </div>
     );
 }
