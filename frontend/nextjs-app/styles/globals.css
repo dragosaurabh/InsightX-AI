@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --color-primary: #0ea5e9;
+  --color-primary-dark: #0284c7;
+  --color-accent: #8b5cf6;
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-light: #334155;
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Custom utility classes */
+@layer components {
+  .glass-card {
+    @apply bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-medium rounded-lg
+           hover:from-primary-600 hover:to-primary-700 transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-slate-900;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-slate-700 text-slate-200 font-medium rounded-lg
+           hover:bg-slate-600 transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-slate-900;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white
+           placeholder:text-slate-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500
+           transition-all duration-200;
+  }
+
+  .chip {
+    @apply inline-flex items-center px-3 py-1.5 bg-slate-700/50 text-slate-300 text-sm rounded-full
+           hover:bg-slate-600/50 cursor-pointer transition-all duration-200;
+  }
+
+  .chip-active {
+    @apply bg-primary-500/20 text-primary-400 border border-primary-500/30;
+  }
+}
+
+/* Message animations */
+.message-enter {
+  animation: messageSlideIn 0.3s ease-out forwards;
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Typing indicator */
+.typing-dot {
+  animation: typingPulse 1.4s infinite both;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingPulse {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* Chart styling */
+.sparkline-path {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.sparkline-area {
+  fill: url(#sparkline-gradient);
+  opacity: 0.3;
+}
+
+/* Code block styling */
+.code-block {
+  @apply font-mono text-sm bg-slate-900 rounded-lg p-4 overflow-x-auto border border-slate-700;
+}
+
+.code-block code {
+  color: #e2e8f0;
+}
+
+/* Number highlight */
+.number-highlight {
+  @apply font-semibold text-primary-400;
+}
+
+/* Stat card */
+.stat-card {
+  @apply glass-card p-4 flex flex-col gap-1;
+}
+
+.stat-label {
+  @apply text-xs text-slate-400 uppercase tracking-wider;
+}
+
+.stat-value {
+  @apply text-xl font-bold text-white;
+}
+
+.stat-change {
+  @apply text-sm font-medium;
+}
+
+.stat-change.positive {
+  @apply text-green-400;
+}
+
+.stat-change.negative {
+  @apply text-red-400;
+}

@@ -1,0 +1,357 @@
+[
+    {
+        "id": 1,
+        "query": "What is the overall failure rate in the last 30 days?",
+        "intent_type": "metric_query",
+        "expected_response": {
+            "summary_line": "Overall failure rate is X% across Y transactions in the last 30 days.",
+            "numbers": [
+                {
+                    "label": "Failure Rate",
+                    "value": "X%"
+                },
+                {
+                    "label": "Total Transactions",
+                    "value": "Y"
+                },
+                {
+                    "label": "Failed Transactions",
+                    "value": "Z"
+                }
+            ],
+            "has_sql": true
+        }
+    },
+    {
+        "id": 2,
+        "query": "Compare failure rate on Android vs iOS in Maharashtra last week.",
+        "intent_type": "comparison",
+        "expected_response": {
+            "summary_line": "Android shows X% failure rate vs Y% on iOS in Maharashtra, a Z% difference.",
+            "numbers": [
+                {
+                    "label": "Failure Rate (Android)",
+                    "value": "X%"
+                },
+                {
+                    "label": "Failure Rate (iOS)",
+                    "value": "Y%"
+                },
+                {
+                    "label": "Difference",
+                    "value": "Z%"
+                }
+            ],
+            "has_chart": true,
+            "chart_type": "bar"
+        }
+    },
+    {
+        "id": 3,
+        "query": "Show average transaction amount by category for December 2025.",
+        "intent_type": "segmentation",
+        "expected_response": {
+            "summary_line": "Average transaction amounts range from ₹X (lowest) to ₹Y (highest) across categories.",
+            "numbers": [
+                {
+                    "label": "Food",
+                    "value": "₹X"
+                },
+                {
+                    "label": "Entertainment",
+                    "value": "₹Y"
+                },
+                {
+                    "label": "Travel",
+                    "value": "₹Z"
+                },
+                {
+                    "label": "Utilities",
+                    "value": "₹W"
+                },
+                {
+                    "label": "Others",
+                    "value": "₹V"
+                }
+            ],
+            "has_chart": true,
+            "chart_type": "bar"
+        }
+    },
+    {
+        "id": 4,
+        "query": "Which age group has the highest transaction volume for Food?",
+        "intent_type": "segmentation",
+        "expected_response": {
+            "summary_line": "Age group X leads with Y transactions for Food category.",
+            "numbers": [
+                {
+                    "label": "<25",
+                    "value": "A"
+                },
+                {
+                    "label": "25-34",
+                    "value": "B"
+                },
+                {
+                    "label": "35-44",
+                    "value": "C"
+                },
+                {
+                    "label": "45+",
+                    "value": "D"
+                }
+            ],
+            "has_chart": true
+        }
+    },
+    {
+        "id": 5,
+        "query": "Why did failures spike on Jan 15, 2026?",
+        "intent_type": "time_series",
+        "expected_response": {
+            "summary_line": "Jan 15 saw X failures, Y% higher than daily average, primarily due to Z failure code.",
+            "numbers": [
+                {
+                    "label": "Failures on Jan 15",
+                    "value": "X"
+                },
+                {
+                    "label": "Daily Average",
+                    "value": "Y"
+                },
+                {
+                    "label": "Top Failure Code",
+                    "value": "Z"
+                }
+            ],
+            "method": "Analyzed daily failure counts and top failure codes for the date."
+        }
+    },
+    {
+        "id": 6,
+        "query": "What percentage of transactions were flagged for review in 2025 Q4?",
+        "intent_type": "metric_query",
+        "expected_response": {
+            "summary_line": "X% of transactions (Y out of Z) were flagged for review in Q4 2025.",
+            "numbers": [
+                {
+                    "label": "Review Rate",
+                    "value": "X%"
+                },
+                {
+                    "label": "Flagged Transactions",
+                    "value": "Y"
+                },
+                {
+                    "label": "Total Transactions",
+                    "value": "Z"
+                }
+            ]
+        }
+    },
+    {
+        "id": 7,
+        "query": "Are failures correlated with 5G networks?",
+        "intent_type": "comparison",
+        "expected_response": {
+            "summary_line": "5G shows X% failure rate compared to Y% overall, indicating Z correlation.",
+            "numbers": [
+                {
+                    "label": "5G Failure Rate",
+                    "value": "X%"
+                },
+                {
+                    "label": "4G Failure Rate",
+                    "value": "Y%"
+                },
+                {
+                    "label": "WiFi Failure Rate",
+                    "value": "Z%"
+                },
+                {
+                    "label": "3G Failure Rate",
+                    "value": "W%"
+                }
+            ],
+            "recommended_actions": [
+                "Monitor network-specific patterns",
+                "Investigate 3G issues if higher"
+            ]
+        }
+    },
+    {
+        "id": 8,
+        "query": "Show peak hours for Entertainment category.",
+        "intent_type": "time_series",
+        "expected_response": {
+            "summary_line": "Entertainment transactions peak at X:00, with Y% of daily volume in evening hours.",
+            "numbers": [
+                {
+                    "label": "Peak Hour",
+                    "value": "X:00"
+                },
+                {
+                    "label": "Peak Volume",
+                    "value": "Y"
+                },
+                {
+                    "label": "Off-Peak Average",
+                    "value": "Z"
+                }
+            ],
+            "has_chart": true,
+            "chart_type": "line"
+        }
+    },
+    {
+        "id": 9,
+        "query": "Compare average amount between Web and Mobile for Utilities.",
+        "intent_type": "comparison",
+        "expected_response": {
+            "summary_line": "Web transactions average ₹X vs ₹Y on Mobile for Utilities, a ₹Z difference.",
+            "numbers": [
+                {
+                    "label": "Avg Amount (Web)",
+                    "value": "₹X"
+                },
+                {
+                    "label": "Avg Amount (Mobile)",
+                    "value": "₹Y"
+                },
+                {
+                    "label": "Difference",
+                    "value": "₹Z"
+                }
+            ]
+        }
+    },
+    {
+        "id": 10,
+        "query": "How many transactions were above ₹10,000 last month?",
+        "intent_type": "metric_query",
+        "expected_response": {
+            "summary_line": "X transactions (Y% of total) exceeded ₹10,000 last month, totaling ₹Z.",
+            "numbers": [
+                {
+                    "label": "Count > ₹10,000",
+                    "value": "X"
+                },
+                {
+                    "label": "Percentage",
+                    "value": "Y%"
+                },
+                {
+                    "label": "Total Volume",
+                    "value": "₹Z"
+                }
+            ]
+        }
+    },
+    {
+        "id": 11,
+        "query": "Which states have the highest refund rates?",
+        "intent_type": "segmentation",
+        "expected_response": {
+            "summary_line": "State X leads with Y% failure rate, followed by State Z at W%.",
+            "numbers": [
+                {
+                    "label": "Top State",
+                    "value": "X - Y%"
+                },
+                {
+                    "label": "Second State",
+                    "value": "Z - W%"
+                }
+            ],
+            "has_chart": true
+        }
+    },
+    {
+        "id": 12,
+        "query": "Show a time series of daily transaction volume for the last 90 days.",
+        "intent_type": "time_series",
+        "expected_response": {
+            "summary_line": "Daily volume averaged X transactions over 90 days, ranging from Y to Z.",
+            "has_chart": true,
+            "chart_type": "line",
+            "method": "Aggregated transaction count by date over the last 90 days."
+        }
+    },
+    {
+        "id": 13,
+        "query": "What are the top 3 failure codes and their counts?",
+        "intent_type": "metric_query",
+        "expected_response": {
+            "summary_line": "Top failure codes: X (Y count), Z (W count), V (U count).",
+            "numbers": [
+                {
+                    "label": "TIMEOUT",
+                    "value": "X"
+                },
+                {
+                    "label": "NETWORK_ERROR",
+                    "value": "Y"
+                },
+                {
+                    "label": "BANK_DECLINED",
+                    "value": "Z"
+                }
+            ],
+            "has_chart": true,
+            "chart_type": "bar"
+        }
+    },
+    {
+        "id": 14,
+        "query": "Provide a short executive summary for January 2026 transactions.",
+        "intent_type": "metric_query",
+        "expected_response": {
+            "summary_line": "January 2026: X transactions totaling ₹Y, with Z% failure rate and W fraud flags.",
+            "numbers": [
+                {
+                    "label": "Total Transactions",
+                    "value": "X"
+                },
+                {
+                    "label": "Total Volume",
+                    "value": "₹Y"
+                },
+                {
+                    "label": "Average Transaction",
+                    "value": "₹Z"
+                },
+                {
+                    "label": "Failure Rate",
+                    "value": "W%"
+                },
+                {
+                    "label": "Fraud Rate",
+                    "value": "V%"
+                },
+                {
+                    "label": "Review Rate",
+                    "value": "U%"
+                }
+            ],
+            "recommended_actions": [
+                "Investigate high failure codes",
+                "Review fraud detection rules",
+                "Monitor trending devices"
+            ]
+        }
+    },
+    {
+        "id": 15,
+        "query": "Suggest 3 follow-up analyses a CFO would want.",
+        "intent_type": "metric_query",
+        "expected_response": {
+            "summary_line": "For CFO review: revenue trends, cost analysis, and risk metrics recommended.",
+            "suggested_followups": [
+                "Show monthly revenue trend for the last quarter",
+                "What is the failed transaction value (lost revenue)?",
+                "Compare fraud rates across payment methods"
+            ]
+        }
+    }
+]

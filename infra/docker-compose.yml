@@ -1,0 +1,93 @@
+# InsightX AI - Docker Compose Configuration
+# Local development and production deployment
+
+version: '3.8'
+
+services:
+  # Backend API Service
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: insightx-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-1.5-flash}
+      - FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://localhost:3000}
+      - DATA_PATH=/app/data/transactions.csv
+      - MAX_CONTEXT_TURNS=${MAX_CONTEXT_TURNS:-6}
+      - RATE_LIMIT_PER_MIN=${RATE_LIMIT_PER_MIN:-10}
+      - REDIS_URL=${REDIS_URL:-}
+    volumes:
+      - ../data:/app/data:ro
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - insightx-network
+
+  # Frontend Web Service
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    container_name: insightx-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - insightx-network
+
+  # Optional: Redis for session storage
+  redis:
+    image: redis:7-alpine
+    container_name: insightx-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    profiles:
+      - with-redis
+    networks:
+      - insightx-network
+
+  # Optional: Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: insightx-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+    profiles:
+      - with-nginx
+    networks:
+      - insightx-network
+
+networks:
+  insightx-network:
+    driver: bridge
+
+volumes:
+  redis-data:
